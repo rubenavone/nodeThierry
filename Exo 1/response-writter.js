@@ -81,14 +81,14 @@ class ResponseContent {
         const json = JSON.parse(responseData);
         this.contentType;
 
-        const tableRows = json.forecast
-          .map((f) => {
-            `
-          <th>t° min = ${f.tmin}</th>
-          <th>t° max = ${f.tmax}</th>
-          `;
-          })
-          .join("");
+        /**
+         * Récupere la totalité du tableau de temperature
+         *  ${tableRows}
+         */
+        // const tableRows = json.forecast
+        //   .map((f) => `<tr><td>${f.tmin[0]}</td><td>${f.tmax[0]}</td></tr>`)
+        //   .join("");
+
         this.htmlSuccess(
           `
                 <header ${this.generiqueBootstrap}>
@@ -98,8 +98,11 @@ class ResponseContent {
                 <a href="/">Acceuil </a> 
                 <p>Météo de ${json.city.name}, il fait actuellement ${json.forecast[0].tmin} ° celsius </p>
                 <table>
+                <tr><th>t° min</th><th>T°max</th></tr>
                   <tr>
-                    ${tableRows}
+                  <td>
+                  ${json.forecast[0].tmin} ${json.forecast[1].tmax}
+                  </td>
                   </tr>
                 </main>
               
