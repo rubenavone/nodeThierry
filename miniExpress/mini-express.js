@@ -5,8 +5,21 @@ class MiniExpress {
     this.middlewares = [];
   }
 
-  use = (middleware) => {
-    this.middlewares.push(middleware);
+  listen(port, callback) {
+    const server = http.createServer((request, response) => {
+      this.useMiddleware(0, request, response);
+    });
+    server.listen(port, callback);
+  }
+
+  useMiddleware = (index, request, response) => {
+    const next = () => {
+      this.useMiddleware(index + 1, request, response);
+    };
+    const middleware = this.middlewares[index];
+    if (middleware) {
+      middleware(request, response, next);
+    }
   };
 
   route = (method, path, callback) => {
@@ -19,15 +32,12 @@ class MiniExpress {
     });
   };
 
-  get = (path, callback) => {
-    this.route("get", callback);
+  use = (middleware) => {
+    this.middlewares.push(middleware);
   };
 
-  listen = (port, callback) => {
-    http.createServer = (request,
-    (response) => {
-      console.log("Le serveur est démaré sur le port", port);
-    }).listen(port);
+  get = (path, callback) => {
+    this.route("get", callback);
   };
 }
 
