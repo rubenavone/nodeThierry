@@ -12,7 +12,7 @@ class MiniExpress {
     server.listen(port, callback);
   }
 
-  useMiddleware = (index, request, response) => {
+  useMiddleware(index, request, response) {
     const next = () => {
       this.useMiddleware(index + 1, request, response);
     };
@@ -20,25 +20,25 @@ class MiniExpress {
     if (middleware) {
       middleware(request, response, next);
     }
-  };
+  }
 
-  route = (method, path, callback) => {
+  route(method, path, callback) {
     this.use((request, response, next) => {
-      if (this.method === method && request.url === path) {
+      if (request.method.toLowerCase() === method && request.url === path) {
         callback(request, response);
       } else {
         next();
       }
     });
-  };
+  }
 
-  use = (middleware) => {
+  use(middleware) {
     this.middlewares.push(middleware);
-  };
+  }
 
-  get = (path, callback) => {
-    this.route("get", callback);
-  };
+  get(path, callback) {
+    this.route("get", path, callback);
+  }
 }
 
 function createMiniExpress() {
